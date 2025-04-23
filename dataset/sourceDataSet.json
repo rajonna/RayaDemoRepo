@@ -1,0 +1,38 @@
+{
+	"name": "sourceDataSet",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "linkedservice_practiserayastorage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "empsourceData.csv",
+				"folderPath": "input",
+				"container": "adfdemo"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": false,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "Maheer",
+				"type": "String"
+			},
+			{
+				"name": " male",
+				"type": "String"
+			},
+			{
+				"name": " 1234",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

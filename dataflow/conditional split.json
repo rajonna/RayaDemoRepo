@@ -1,0 +1,78 @@
+{
+	"name": "conditional split",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "EmpData",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "outputemp",
+						"type": "DatasetReference"
+					},
+					"name": "itsink"
+				},
+				{
+					"dataset": {
+						"referenceName": "outputemp",
+						"type": "DatasetReference"
+					},
+					"name": "hrsink"
+				},
+				{
+					"dataset": {
+						"referenceName": "outputemp",
+						"type": "DatasetReference"
+					},
+					"name": "payrollsink"
+				}
+			],
+			"transformations": [
+				{
+					"name": "split1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          empid as integer,",
+				"          name as string,",
+				"          country as string,",
+				"          department as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source1 split(department==1,",
+				"     department==2,",
+				"     department==3,",
+				"     disjoint: false) ~> split1@(ITemployees, HRemployees, payrollemployees)",
+				"split1@ITemployees sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['itEmplist.csv'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> itsink",
+				"split1@HRemployees sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['HRemplist.csv'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> hrsink",
+				"split1@payrollemployees sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['payrollEmplist.csv'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> payrollsink"
+			]
+		}
+	}
+}

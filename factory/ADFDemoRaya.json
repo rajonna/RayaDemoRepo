@@ -1,0 +1,9 @@
+{
+	"name": "ADFDemoRaya",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "2b7ea6b7-73a3-4028-a76a-d394b7268e58",
+		"tenantId": "94cae9ea-0b8a-42ae-8bd1-f931240f41de"
+	}
+}

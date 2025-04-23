@@ -1,0 +1,28 @@
+{
+	"name": "merge activity",
+	"properties": {
+		"type": "WranglingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"name": "EmpData",
+					"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> EmpData",
+					"dataset": {
+						"referenceName": "EmpData",
+						"type": "DatasetReference"
+					}
+				},
+				{
+					"name": "DeptData",
+					"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> DeptData",
+					"dataset": {
+						"referenceName": "DeptData",
+						"type": "DatasetReference"
+					}
+				}
+			],
+			"script": "section Section1;\r\nshared EmpData = let AdfDoc = AzureStorage.BlobContents(\"https://practiserayastorage.blob.core.windows.net/adfdemo/input/employee.csv\"),Csv = Csv.Document(AdfDoc, [Delimiter = \",\", Encoding = TextEncoding.Utf8, QuoteStyle = QuoteStyle.Csv]), PromotedHeaders = Table.PromoteHeaders(Csv, [PromoteAllScalars = true]) in  PromotedHeaders;\r\nshared DeptData = let AdfDoc = AzureStorage.BlobContents(\"https://practiserayastorage.blob.core.windows.net/adfdemo/input/department.csv\"),Csv = Csv.Document(AdfDoc, [Delimiter = \",\", Encoding = TextEncoding.Utf8, QuoteStyle = QuoteStyle.Csv]), PromotedHeaders = Table.PromoteHeaders(Csv, [PromoteAllScalars = true]) in  PromotedHeaders;\r\nshared UserQuery = let Source = #\"EmpData\",\r\n  #\"Merged queries\" = Table.NestedJoin(Source, {\"department\"}, DeptData, {\"depid\"}, \"DeptData\", JoinKind.Inner),\r\n  #\"Expanded DeptData\" = Table.ExpandTableColumn(#\"Merged queries\", \"DeptData\", {\"depid\", \"depname\"}, {\"depid\", \"depname\"}),\r\n  #\"Removed columns\" = Table.RemoveColumns(#\"Expanded DeptData\", {\"department\"}),\r\n  #\"Renamed columns\" = Table.RenameColumns(#\"Removed columns\", {{\"name\", \"empName\"}}) in #\"Renamed columns\";\r\n",
+			"documentLocale": "en-us"
+		}
+	}
+}

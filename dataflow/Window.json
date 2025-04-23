@@ -1,0 +1,57 @@
+{
+	"name": "Window",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "Employees1",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "outputemp",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "window1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          empid as integer,",
+				"          name as string,",
+				"          gender as string,",
+				"          country as string,",
+				"          salary as integer,",
+				"          department as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     dateFormats: ['MM/dd/yyyy','dd/MM/yyyy','MM-dd-yyyy','dd-MM-yyyy','yyyy-MM-dd','dd.MM.yyyy','MM.dd.yyyy','yyyy.MM.dd','yyyy/MM/dd'],",
+				"     timestampFormats: ['MM/dd/yyyy HH:mm:ss','MM-dd-yyyy HH:mm:ss']) ~> source1",
+				"source1 window(over(department),",
+				"     desc(salary, true),",
+				"     {dense rank} = denseRank(),",
+				"          {total salary} = sum(salary),",
+				"          {avg salary} = avg(salary)) ~> window1",
+				"window1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['WindowEmp.csv'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1"
+			]
+		}
+	}
+}

@@ -1,0 +1,20 @@
+{
+	"name": "dummydataset",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "linkedservice_practiserayastorage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "dummy.txt",
+				"folderPath": "output",
+				"container": "adfdemo"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

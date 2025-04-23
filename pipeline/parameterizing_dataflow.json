@@ -1,0 +1,52 @@
+{
+	"name": "parameterizing_dataflow",
+	"properties": {
+		"activities": [
+			{
+				"name": "Data flow1",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "parameterizing",
+						"type": "DataFlowReference",
+						"parameters": {
+							"filterOn": {
+								"value": "'@{pipeline().parameters.filterOn}'",
+								"type": "Expression"
+							},
+							"filterValue": {
+								"value": "'@{pipeline().parameters.filterValue}'",
+								"type": "Expression"
+							}
+						}
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			}
+		],
+		"parameters": {
+			"filterOn": {
+				"type": "string"
+			},
+			"filterValue": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2025-04-22T18:31:15Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}
