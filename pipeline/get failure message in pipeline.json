@@ -1,0 +1,60 @@
+{
+	"name": "get failure message in pipeline",
+	"properties": {
+		"activities": [
+			{
+				"name": "Stored procedure1",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "somethingrandom"
+				},
+				"linkedServiceName": {
+					"referenceName": "linkedService_SQL",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"dbName": "something"
+					}
+				}
+			},
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Stored procedure1",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "error message",
+					"value": {
+						"value": "@activity('Stored procedure1').Error.Message",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"variables": {
+			"error message": {
+				"type": "String"
+			}
+		},
+		"annotations": []
+	}
+}
