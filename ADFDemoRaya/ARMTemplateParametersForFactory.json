@@ -1,0 +1,27 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "ADFDemoRaya"
+		},
+		"linkedService_SQL_password": {
+			"value": ""
+		},
+		"linkedservice_practiserayastorage_connectionString": {
+			"value": ""
+		},
+		"linkedService_SQL_properties_typeProperties_server": {
+			"value": "mydbserver.windows.db.net"
+		},
+		"linkedService_SQL_properties_typeProperties_database": {
+			"value": "@{linkedService().dbName}"
+		},
+		"linkedService_SQL_properties_typeProperties_userName": {
+			"value": "Raya"
+		},
+		"trigger1_properties_typeProperties_scope": {
+			"value": "/subscriptions/772b1766-e2d0-4e99-bc64-977b4dbb5695/resourceGroups/Practise_RG/providers/Microsoft.Storage/storageAccounts/practiserayastorage"
+		}
+	}
+}
